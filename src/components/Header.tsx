@@ -63,6 +63,7 @@ const Header = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
             {[
+              { name: 'Home', path: '/' },
               { name: 'About', path: '/about' },
               { name: 'Achievements', path: '/achievements' },
               { name: 'Team', path: '/team' },
@@ -119,6 +120,7 @@ const Header = () => {
           <div className="lg:hidden mt-4 pb-4 border-t border-gray-700/50">
             <div className="flex flex-col space-y-3 pt-4">
               {[
+                { name: 'Home', path: '/' },
                 { name: 'About', path: '/about' },
                 { name: 'Achievements', path: '/achievements' },
                 { name: 'Team', path: '/team' },

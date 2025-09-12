@@ -149,7 +149,7 @@ const Hero = () => {
             
             {/* Hero Slider */}
             <AnimatedSection animation="fadeIn" className="w-full max-w-6xl mb-16">
-              <div className="relative">
+              <div className="relative -mx-6 sm:-mx-12 lg:-mx-24">
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-green-400/10 rounded-3xl blur-2xl"></div>
                 <div className="relative h-[500px] sm:h-[600px]">
                   <Slider

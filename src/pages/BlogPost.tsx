@@ -118,6 +118,35 @@ const BlogPost = () => {
         modifiedTime={blog.updatedAt?.toDate ? format(blog.updatedAt.toDate(), 'yyyy-MM-dd') : undefined}
       />
       
+      {/* Blog Article Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": blog.title,
+          "description": blog.seoDescription || blog.excerpt,
+          "image": blog.featuredImage,
+          "author": {
+            "@type": "Organization",
+            "name": "Team Qbrain"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Qbrain Team",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://qbrain.in/favicon.png"
+            }
+          },
+          "datePublished": publishedDate,
+          "dateModified": blog.updatedAt?.toDate ? format(blog.updatedAt.toDate(), 'yyyy-MM-dd') : publishedDate,
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": `https://qbrain.in/blog/${blog.slug}`
+          }
+        })}
+      </script>
+      
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-black text-white">
         <Header />
         

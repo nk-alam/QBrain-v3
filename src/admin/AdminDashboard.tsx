@@ -30,6 +30,9 @@ import AchievementManager from './components/AchievementManager';
 import WelcomeSettingsManager from './components/WelcomeSettingsManager';
 import SEOManager from './components/SEOManager';
 import JoinTeamSettingsManager from './components/JoinTeamSettingsManager';
+import RecentActivity from './components/RecentActivity';
+import SitemapManager from './components/SitemapManager';
+import { Globe } from 'lucide-react';
 import { getApplications, getContactMessages, getTeamMembers, getHackathons, getBlogs } from '../services/firebaseService';
 
 const AdminDashboard = () => {
@@ -94,6 +97,7 @@ const AdminDashboard = () => {
     { id: 'jointeam', label: 'Join Team Settings', icon: Settings },
     { id: 'welcome', label: 'Welcome & Audio', icon: Volume2 },
     { id: 'seo', label: 'SEO & Analytics', icon: Search },
+    { id: 'sitemap', label: 'Sitemap Manager', icon: Globe },
     { id: 'ui', label: 'UI Customizer', icon: BarChart3 }
   ];
 
@@ -209,20 +213,7 @@ const AdminDashboard = () => {
 
               <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
                 <h3 className="text-lg font-semibold text-white mb-4">Recent Activity</h3>
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-center justify-between p-2 bg-slate-700/30 rounded">
-                    <span className="text-gray-300">New application received</span>
-                    <span className="text-gray-500">2h ago</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2 bg-slate-700/30 rounded">
-                    <span className="text-gray-300">Blog post published</span>
-                    <span className="text-gray-500">1d ago</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2 bg-slate-700/30 rounded">
-                    <span className="text-gray-300">Team member added</span>
-                    <span className="text-gray-500">3d ago</span>
-                  </div>
-                </div>
+                <RecentActivity />
               </div>
             </div>
           </div>
@@ -245,6 +236,8 @@ const AdminDashboard = () => {
         return <WelcomeSettingsManager />;
       case 'seo':
         return <SEOManager />;
+      case 'sitemap':
+        return <SitemapManager />;
       case 'ui':
         return <UICustomizer />;
       default:

@@ -21,7 +21,12 @@ const AchievementsPage = () => {
   const loading = hackathonsLoading || achievementsLoading;
   
   const handleAchievementClick = (achievementId: string) => {
-    navigate(`/achievements/${achievementId}`);
+    const achievement = achievements.find((a: any) => a.id === achievementId);
+    if (achievement && achievement.slug) {
+      navigate(`/achievements/${achievement.slug}`);
+    } else {
+      navigate(`/achievements/${achievementId}`);
+    }
   };
 
   // Filter achievements

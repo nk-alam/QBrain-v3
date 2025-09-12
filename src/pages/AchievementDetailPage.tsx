@@ -81,6 +81,26 @@ const AchievementDetailPage = () => {
         keywords={`qbrain achievement, ${achievement.category}, ${achievement.technologies?.join(', ')}`}
         image={achievement.images?.[0]}
         url={`https://qbrain.in/achievements/${achievement.id}`}
+      >
+        {/* Achievement Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Achievement",
+            "name": achievement.title,
+            "description": achievement.description,
+            "image": achievement.images?.[0],
+            "dateAchieved": achievement.date?.toDate()?.toISOString(),
+            "location": achievement.location,
+            "award": achievement.position,
+            "achiever": {
+              "@type": "Organization",
+              "name": "Qbrain Team"
+            },
+            "category": achievement.category
+          })}
+        </script>
+      </SEOHead>
       />
       
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-black text-white">

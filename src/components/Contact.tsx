@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { sendContactEmail } from '../services/emailService';
 import { saveContactMessage as saveToFirebase } from '../services/firebaseService';
+import { sanitizeInput, isValidEmail, RateLimiter } from '../utils/security';
 import { 
   MessageSquare, 
   Mail, 
@@ -32,15 +33,41 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Rate limiting
+    if (!RateLimiter.isAllowed('contact-form', 3, 300000)) { // 3 attempts per 5 minutes
+      toast.error('Too many attempts. Please wait before submitting again.');
+      return;
+    }
+    
+    // Validate and sanitize inputs
+    const sanitizedData = {
+      name: sanitizeInput(formData.name),
+      email: sanitizeInput(formData.email),
+      subject: sanitizeInput(formData.subject),
+      message: sanitizeInput(formData.message)
+    };
+    
+    // Validation
+    if (!sanitizedData.name || !sanitizedData.email || !sanitizedData.message) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+    
+    if (!isValidEmail(sanitizedData.email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
       // Save to Firebase
-      const saveResult = await saveToFirebase(formData);
+      const saveResult = await saveToFirebase(sanitizedData);
       
       if (saveResult.success) {
         // Send emails
-        const emailResult = await sendContactEmail(formData);
+        const emailResult = await sendContactEmail(sanitizedData);
         
         if (emailResult.success) {
           setSubmitted(true);

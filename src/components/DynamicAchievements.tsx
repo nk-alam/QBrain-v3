@@ -48,7 +48,12 @@ const DynamicAchievements = () => {
   const featuredHackathon = completedHackathons.find((h: any) => h.result?.toLowerCase().includes('first') || h.result?.toLowerCase().includes('winner')) || completedHackathons[0];
 
   const handleAchievementClick = (achievementId: string) => {
-    navigate(`/achievements/${achievementId}`);
+    const achievement = achievements.find((a: any) => a.id === achievementId);
+    if (achievement && achievement.slug) {
+      navigate(`/achievements/${achievement.slug}`);
+    } else {
+      navigate(`/achievements/${achievementId}`);
+    }
   };
 
   const handleViewAllAchievements = () => {

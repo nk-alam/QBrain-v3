@@ -9,13 +9,6 @@ const WelcomeManager: React.FC = () => {
   const [welcomeMessage, setWelcomeMessage] = useState('');
 
   useEffect(() => {
-    // Check if welcome has been played in this session
-    const welcomePlayed = sessionStorage.getItem('welcomePlayed');
-    if (welcomePlayed) {
-      setHasPlayed(true);
-      return;
-    }
-
     // Load welcome settings
     loadWelcomeSettings();
   }, []);
@@ -41,12 +34,11 @@ const WelcomeManager: React.FC = () => {
   };
 
   const playWelcome = () => {
-    if (!hasPlayed && isEnabled) {
+    if (isEnabled) {
       // Add a small delay to ensure page is loaded
       setTimeout(() => {
         audioManager.playWelcomeMessage(welcomeMessage);
         setHasPlayed(true);
-        sessionStorage.setItem('welcomePlayed', 'true');
       }, 1000);
     }
   };
@@ -54,7 +46,7 @@ const WelcomeManager: React.FC = () => {
   // Auto-play on first user interaction
   useEffect(() => {
     const handleFirstInteraction = () => {
-      if (!hasPlayed && isEnabled) {
+      if (isEnabled) {
         playWelcome();
       }
       // Remove listeners after first interaction
@@ -72,7 +64,7 @@ const WelcomeManager: React.FC = () => {
       document.removeEventListener('keydown', handleFirstInteraction);
       document.removeEventListener('scroll', handleFirstInteraction);
     };
-  }, [hasPlayed, isEnabled]);
+  }, [isEnabled]);
 
   if (!isEnabled) return null;
 

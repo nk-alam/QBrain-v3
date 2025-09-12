@@ -31,11 +31,9 @@ const HomePage = () => {
           <About />
           <DynamicAchievements />
           <DynamicTeamStructure />
-          <JoinTeam />
           <BlogSection />
           <TechFocus />
           <FAQ />
-          <Contact />
         </main>
         <Footer />
         <WelcomeManager />

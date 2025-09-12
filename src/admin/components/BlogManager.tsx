@@ -42,6 +42,8 @@ const BlogManager: React.FC<BlogManagerProps> = ({ onUpdate }) => {
       [{ 'align': [] }],
       ['link', 'image', 'video'],
       ['blockquote', 'code-block'],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      [{ 'font': [] }],
       ['clean']
     ]
   };

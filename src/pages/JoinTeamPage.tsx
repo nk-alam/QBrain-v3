@@ -135,7 +135,7 @@ const JoinTeamPage = () => {
               </AnimatedSection>
 
               {/* Benefits Section */}
-              {settings?.benefits && (
+              {settings?.benefits && settings.enabled && (
                 <AnimatedSection animation="slideUp" className="mb-16">
                   <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {settings.benefits.map((benefit: any, index: number) => (

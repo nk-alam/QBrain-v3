@@ -14,6 +14,21 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage
 import { db, storage } from '../config/firebase';
 import { v4 as uuidv4 } from 'uuid';
 
+// Security: Input validation and sanitization
+const sanitizeInput = (input: string): string => {
+  if (typeof input !== 'string') return '';
+  return input
+    .replace(/[<>]/g, '') // Remove potential HTML tags
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/on\w+=/gi, '') // Remove event handlers
+    .trim();
+};
+
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 // Helper function to create SEO-friendly slug
 // Helper function to create SEO-friendly slug
 const createSlug = (title: string): string => {
@@ -156,6 +171,20 @@ export const updateJoinTeamSettings = async (settings: any) => {
 // Team Members
 export const addTeamMember = async (memberData: any, imageFile?: File) => {
   try {
+    // Sanitize inputs
+    const sanitizedData = {
+      ...memberData,
+      name: sanitizeInput(memberData.name),
+      role: sanitizeInput(memberData.role),
+      description: sanitizeInput(memberData.description),
+      email: memberData.email ? sanitizeInput(memberData.email) : ''
+    };
+    
+    // Validate email if provided
+    if (sanitizedData.email && !validateEmail(sanitizedData.email)) {
+      return { success: false, error: 'Invalid email format' };
+    }
+    
     let imageUrl = '';
     
     if (imageFile) {
@@ -165,7 +194,7 @@ export const addTeamMember = async (memberData: any, imageFile?: File) => {
     }
 
     const docRef = await addDoc(collection(db, 'teamMembers'), {
-      ...memberData,
+      ...sanitizedData,
       imageUrl,
       createdAt: Timestamp.now()
     });
@@ -300,6 +329,25 @@ export const deleteHackathon = async (id: string, imageUrl?: string) => {
 // Applications
 export const saveApplication = async (applicationData: any) => {
   try {
+    // Sanitize personal info
+    if (applicationData.personalInfo) {
+      applicationData.personalInfo = {
+        ...applicationData.personalInfo,
+        fullName: sanitizeInput(applicationData.personalInfo.fullName || ''),
+        email: sanitizeInput(applicationData.personalInfo.email || ''),
+        phone: sanitizeInput(applicationData.personalInfo.phone || ''),
+        college: sanitizeInput(applicationData.personalInfo.college || ''),
+        branch: sanitizeInput(applicationData.personalInfo.branch || ''),
+        motivation: sanitizeInput(applicationData.personalInfo.motivation || ''),
+        experience: sanitizeInput(applicationData.personalInfo.experience || '')
+      };
+      
+      // Validate email
+      if (!validateEmail(applicationData.personalInfo.email)) {
+        return { success: false, error: 'Invalid email format' };
+      }
+    }
+    
     const docRef = await addDoc(collection(db, 'applications'), {
       ...applicationData,
       status: 'pending',
@@ -331,8 +379,26 @@ export const getApplications = async () => {
 // Contact Messages
 export const saveContactMessage = async (messageData: any) => {
   try {
+    // Sanitize inputs
+    const sanitizedData = {
+      name: sanitizeInput(messageData.name),
+      email: sanitizeInput(messageData.email),
+      subject: sanitizeInput(messageData.subject),
+      message: sanitizeInput(messageData.message)
+    };
+    
+    // Validate required fields
+    if (!sanitizedData.name || !sanitizedData.email || !sanitizedData.message) {
+      return { success: false, error: 'Missing required fields' };
+    }
+    
+    // Validate email
+    if (!validateEmail(sanitizedData.email)) {
+      return { success: false, error: 'Invalid email format' };
+    }
+    
     const docRef = await addDoc(collection(db, 'contactMessages'), {
-      ...messageData,
+      ...sanitizedData,
       status: 'unread',
       createdAt: Timestamp.now()
     });
@@ -545,15 +611,22 @@ export const deleteAchievement = async (id: string, images?: string[]) => {
 };
 
 // Get Achievement by ID
-export const getAchievementById = async (id: string) => {
+export const getAchievementById = async (idOrSlug: string) => {
   try {
-    const docRef = doc(db, 'achievements', id);
-    const docSnap = await getDocs(query(collection(db, 'achievements'), where('__name__', '==', id)));
+    // First try to find by slug
+    let q = query(collection(db, 'achievements'), where('slug', '==', idOrSlug));
+    let querySnapshot = await getDocs(q);
     
-    if (!docSnap.empty) {
+    // If not found by slug, try by ID
+    if (querySnapshot.empty) {
+      q = query(collection(db, 'achievements'), where('__name__', '==', idOrSlug));
+      querySnapshot = await getDocs(q);
+    }
+    
+    if (!querySnapshot.empty) {
       const achievement = {
-        id: docSnap.docs[0].id,
-        ...docSnap.docs[0].data()
+        id: querySnapshot.docs[0].id,
+        ...querySnapshot.docs[0].data()
       };
       return { success: true, data: achievement };
     }

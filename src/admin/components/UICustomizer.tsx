@@ -17,7 +17,34 @@ const UICustomizer = () => {
     fontFamily: 'Inter',
     headerStyle: 'gradient',
     buttonStyle: 'rounded',
-    animationSpeed: 'normal'
+    animationSpeed: 'normal',
+    typography: {
+      fontFamily: 'Inter',
+      headingFontFamily: 'Inter',
+      fontSize: {
+        xs: '12px',
+        sm: '14px',
+        base: '16px',
+        lg: '18px',
+        xl: '20px',
+        '2xl': '24px',
+        '3xl': '30px',
+        '4xl': '36px',
+        '5xl': '48px',
+        '6xl': '60px'
+      },
+      lineHeight: {
+        tight: '1.25',
+        normal: '1.5',
+        relaxed: '1.75'
+      },
+      fontWeight: {
+        normal: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700'
+      }
+    }
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -59,6 +86,27 @@ const UICustomizer = () => {
     root.style.setProperty('--muted-text', settings.mutedTextColor);
     root.style.setProperty('--border-radius', `${settings.borderRadius}px`);
     root.style.setProperty('--spacing', `${settings.spacing * 4}px`);
+    
+    // Apply typography settings
+    if (settings.typography) {
+      root.style.setProperty('--font-family', settings.typography.fontFamily);
+      root.style.setProperty('--heading-font-family', settings.typography.headingFontFamily);
+      
+      // Apply font sizes
+      Object.entries(settings.typography.fontSize).forEach(([size, value]) => {
+        root.style.setProperty(`--font-size-${size}`, value);
+      });
+      
+      // Apply line heights
+      Object.entries(settings.typography.lineHeight).forEach(([name, value]) => {
+        root.style.setProperty(`--line-height-${name}`, value);
+      });
+      
+      // Apply font weights
+      Object.entries(settings.typography.fontWeight).forEach(([name, value]) => {
+        root.style.setProperty(`--font-weight-${name}`, value);
+      });
+    }
   };
 
   const resetToDefault = () => {
@@ -75,7 +123,34 @@ const UICustomizer = () => {
       fontFamily: 'Inter',
       headerStyle: 'gradient',
       buttonStyle: 'rounded',
-      animationSpeed: 'normal'
+      animationSpeed: 'normal',
+      typography: {
+        fontFamily: 'Inter',
+        headingFontFamily: 'Inter',
+        fontSize: {
+          xs: '12px',
+          sm: '14px',
+          base: '16px',
+          lg: '18px',
+          xl: '20px',
+          '2xl': '24px',
+          '3xl': '30px',
+          '4xl': '36px',
+          '5xl': '48px',
+          '6xl': '60px'
+        },
+        lineHeight: {
+          tight: '1.25',
+          normal: '1.5',
+          relaxed: '1.75'
+        },
+        fontWeight: {
+          normal: '400',
+          medium: '500',
+          semibold: '600',
+          bold: '700'
+        }
+      }
     });
   };
 
@@ -235,7 +310,7 @@ const UICustomizer = () => {
 
           {/* Layout Settings */}
           <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Layout & Spacing</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">Layout, Spacing & Typography</h3>
             
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -266,6 +341,114 @@ const UICustomizer = () => {
                 </div>
               </div>
 
+              {/* Typography Settings */}
+              <div className="border-t border-slate-600/50 pt-4">
+                <h4 className="text-white font-medium mb-4">Typography</h4>
+                
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Body Font</label>
+                    <select
+                      value={settings.typography?.fontFamily || 'Inter'}
+                      onChange={(e) => setSettings({
+                        ...settings,
+                        typography: { ...settings.typography, fontFamily: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded text-white text-sm"
+                    >
+                      <option value="Inter">Inter</option>
+                      <option value="Roboto">Roboto</option>
+                      <option value="Open Sans">Open Sans</option>
+                      <option value="Lato">Lato</option>
+                      <option value="Montserrat">Montserrat</option>
+                      <option value="Poppins">Poppins</option>
+                      <option value="Source Sans Pro">Source Sans Pro</option>
+                      <option value="Nunito">Nunito</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Heading Font</label>
+                    <select
+                      value={settings.typography?.headingFontFamily || 'Inter'}
+                      onChange={(e) => setSettings({
+                        ...settings,
+                        typography: { ...settings.typography, headingFontFamily: e.target.value }
+                      })}
+                      className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded text-white text-sm"
+                    >
+                      <option value="Inter">Inter</option>
+                      <option value="Roboto">Roboto</option>
+                      <option value="Playfair Display">Playfair Display</option>
+                      <option value="Merriweather">Merriweather</option>
+                      <option value="Oswald">Oswald</option>
+                      <option value="Raleway">Raleway</option>
+                      <option value="Bebas Neue">Bebas Neue</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Base Font Size</label>
+                    <select
+                      value={settings.typography?.fontSize?.base || '16px'}
+                      onChange={(e) => setSettings({
+                        ...settings,
+                        typography: {
+                          ...settings.typography,
+                          fontSize: { ...settings.typography?.fontSize, base: e.target.value }
+                        }
+                      })}
+                      className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded text-white text-sm"
+                    >
+                      <option value="14px">14px</option>
+                      <option value="16px">16px</option>
+                      <option value="18px">18px</option>
+                      <option value="20px">20px</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Line Height</label>
+                    <select
+                      value={settings.typography?.lineHeight?.normal || '1.5'}
+                      onChange={(e) => setSettings({
+                        ...settings,
+                        typography: {
+                          ...settings.typography,
+                          lineHeight: { ...settings.typography?.lineHeight, normal: e.target.value }
+                        }
+                      })}
+                      className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded text-white text-sm"
+                    >
+                      <option value="1.25">Tight (1.25)</option>
+                      <option value="1.5">Normal (1.5)</option>
+                      <option value="1.75">Relaxed (1.75)</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Font Weight</label>
+                    <select
+                      value={settings.typography?.fontWeight?.normal || '400'}
+                      onChange={(e) => setSettings({
+                        ...settings,
+                        typography: {
+                          ...settings.typography,
+                          fontWeight: { ...settings.typography?.fontWeight, normal: e.target.value }
+                        }
+                      })}
+                      className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded text-white text-sm"
+                    >
+                      <option value="300">Light (300)</option>
+                      <option value="400">Normal (400)</option>
+                      <option value="500">Medium (500)</option>
+                      <option value="600">Semibold (600)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Header Style</label>
@@ -308,7 +491,8 @@ const UICustomizer = () => {
             className="rounded-lg p-6 space-y-4"
             style={{ 
               backgroundColor: settings.cardBackground,
-              borderRadius: `${settings.borderRadius}px`
+              borderRadius: `${settings.borderRadius}px`,
+              fontFamily: settings.typography?.fontFamily || 'Inter'
             }}
           >
             <div className="flex items-center space-x-3">
@@ -321,10 +505,19 @@ const UICustomizer = () => {
                 <Monitor className="h-6 w-6 text-black" />
               </div>
               <div>
-                <h4 style={{ color: settings.textColor }} className="font-semibold">
+                <h4 style={{ 
+                  color: settings.textColor,
+                  fontFamily: settings.typography?.headingFontFamily || 'Inter',
+                  fontSize: settings.typography?.fontSize?.lg || '18px',
+                  fontWeight: settings.typography?.fontWeight?.semibold || '600'
+                }} className="font-semibold">
                   Sample Card Title
                 </h4>
-                <p style={{ color: settings.mutedTextColor }} className="text-sm">
+                <p style={{ 
+                  color: settings.mutedTextColor,
+                  fontSize: settings.typography?.fontSize?.sm || '14px',
+                  lineHeight: settings.typography?.lineHeight?.normal || '1.5'
+                }}>
                   This is how your content will look
                 </p>
               </div>

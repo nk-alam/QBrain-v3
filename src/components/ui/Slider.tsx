@@ -64,7 +64,7 @@ const Slider: React.FC<SliderProps> = ({
           crossFade: true
         }}
         loop={true}
-        className="w-full h-full rounded-3xl overflow-hidden"
+        className="w-full h-full rounded-3xl overflow-hidden !mx-0"
         onBeforeInit={(swiper) => {
           if (typeof swiper.params.navigation !== 'boolean') {
             const navigation = swiper.params.navigation;

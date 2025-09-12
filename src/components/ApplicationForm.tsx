@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, Mail, Phone, GraduationCap, Calendar, MapPin } from 'lucide-react';
+import { sanitizeInput, isValidEmail, isValidPhone } from '../utils/security';
 
 interface ApplicationFormProps {
   onDataChange: (data: any) => void;
@@ -43,7 +44,27 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({ onDataChange, data })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    const updatedData = { ...formData, [name]: value };
+    
+    // Sanitize input
+    const sanitizedValue = sanitizeInput(value);
+    
+    // Additional validation for specific fields
+    if (name === 'email' && sanitizedValue && !isValidEmail(sanitizedValue)) {
+      // Don't update if email format is invalid (but allow partial typing)
+      if (sanitizedValue.includes('@') && !sanitizedValue.endsWith('@')) {
+        return;
+      }
+    }
+    
+    if (name === 'phone' && sanitizedValue && !isValidPhone(sanitizedValue)) {
+      // Only allow numbers, +, -, (, ), and spaces for phone
+      const phoneRegex = /^[\d\+\-\(\)\s]*$/;
+      if (!phoneRegex.test(sanitizedValue)) {
+        return;
+      }
+    }
+    
+    const updatedData = { ...formData, [name]: sanitizedValue };
     setFormData(updatedData);
     onDataChange({ personalInfo: updatedData });
   };
