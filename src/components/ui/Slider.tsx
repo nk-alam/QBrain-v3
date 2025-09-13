@@ -41,7 +41,7 @@ const Slider: React.FC<SliderProps> = ({
   const nextRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative w-full ${className}`}>
       <Swiper
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         spaceBetween={0}
@@ -64,7 +64,7 @@ const Slider: React.FC<SliderProps> = ({
           crossFade: true
         }}
         loop={true}
-        className="w-full h-full rounded-3xl overflow-hidden !mx-0"
+        className="w-full h-full rounded-xl sm:rounded-2xl lg:rounded-3xl overflow-hidden !mx-0"
         onBeforeInit={(swiper) => {
           if (typeof swiper.params.navigation !== 'boolean') {
             const navigation = swiper.params.navigation;
@@ -77,7 +77,7 @@ const Slider: React.FC<SliderProps> = ({
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={slide.id}>
-            <div className="relative h-full min-h-[400px] flex items-center justify-center">
+            <div className="relative h-full min-h-[300px] sm:min-h-[400px] lg:min-h-[500px] flex items-center justify-center">
               {/* Background Image */}
               {slide.image && (
                 <div className="absolute inset-0">
@@ -91,15 +91,15 @@ const Slider: React.FC<SliderProps> = ({
               )}
               
               {/* Content */}
-              <div className="relative z-10 text-center px-6 sm:px-12 max-w-4xl mx-auto">
+              <div className="relative z-10 text-center px-4 sm:px-6 lg:px-12 max-w-4xl mx-auto">
                 {slide.badge && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-cyan-400/20 to-green-400/20 border border-cyan-400/30 rounded-full backdrop-blur-sm mb-6"
+                    className="inline-flex items-center px-3 py-1 sm:px-4 sm:py-2 bg-gradient-to-r from-cyan-400/20 to-green-400/20 border border-cyan-400/30 rounded-full backdrop-blur-sm mb-4 sm:mb-6"
                   >
-                    <span className="text-sm font-bold text-cyan-400">{slide.badge}</span>
+                    <span className="text-xs sm:text-sm font-bold text-cyan-400">{slide.badge}</span>
                   </motion.div>
                 )}
                 
@@ -107,7 +107,7 @@ const Slider: React.FC<SliderProps> = ({
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight"
+                  className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight"
                 >
                   {slide.title}
                 </motion.h2>
@@ -116,7 +116,7 @@ const Slider: React.FC<SliderProps> = ({
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="text-lg sm:text-xl text-gray-300 mb-8 leading-relaxed"
+                  className="text-base sm:text-lg lg:text-xl text-gray-300 mb-6 sm:mb-8 leading-relaxed"
                 >
                   {slide.description}
                 </motion.p>
@@ -127,7 +127,7 @@ const Slider: React.FC<SliderProps> = ({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
                     onClick={slide.action.onClick}
-                    className="px-8 py-4 bg-gradient-to-r from-cyan-400 to-green-400 text-black font-bold rounded-full hover:shadow-lg hover:shadow-cyan-400/25 transition-all duration-300 transform hover:scale-105"
+                    className="px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-cyan-400 to-green-400 text-black font-bold rounded-full hover:shadow-lg hover:shadow-cyan-400/25 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                   >
                     {slide.action.label}
                   </motion.button>
@@ -143,15 +143,15 @@ const Slider: React.FC<SliderProps> = ({
         <>
           <button
             ref={prevRef}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 p-3 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110"
+            className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 z-20 p-2 sm:p-3 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
           </button>
           <button
             ref={nextRef}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 p-3 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110"
+            className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 z-20 p-2 sm:p-3 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
           </button>
         </>
       )}

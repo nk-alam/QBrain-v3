@@ -66,8 +66,11 @@ const Header = () => {
               { name: 'Home', path: '/' },
               { name: 'About', path: '/about' },
               { name: 'Achievements', path: '/achievements' },
+              { name: 'Projects', path: '/projects' },
               { name: 'Team', path: '/team' },
               { name: 'Join', path: '/join' },
+              { name: 'Donate', path: '/donate' },
+              { name: 'Donate', path: '/donate' },
               { name: 'Contact', path: '/contact' }
             ].map((item) => (
               <button
@@ -79,7 +82,11 @@ const Header = () => {
                     navigateToPage(item.path);
                   }
                 }}
-                className="relative text-gray-300 hover:text-cyan-400 transition-colors duration-300 group text-sm xl:text-base"
+                className={`hover:text-cyan-400 transition-colors duration-300 text-left py-2 px-2 rounded-lg hover:bg-slate-700/30 ${
+                  item.name === 'Donate' ? 'text-pink-400 hover:text-pink-300' : 'text-gray-300'
+                }`}
+                  item.name === 'Donate' ? 'text-pink-400 hover:text-pink-300' : 'text-gray-300'
+                }`}
               >
                 {item.name}
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-green-400 group-hover:w-full transition-all duration-300"></div>

@@ -9,7 +9,8 @@ import {
   orderBy, 
   where,
   Timestamp,
-  getDoc
+  getDoc,
+  setDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { db, storage } from '../config/firebase.js';
@@ -68,24 +69,14 @@ export const updateWelcomeSettings = async (settings: any, audioFile?: File) => 
     }
 
     const docRef = doc(db, 'settings', 'welcome');
-    await updateDoc(docRef, {
+    await setDoc(docRef, {
       ...updateData,
       updatedAt: Timestamp.now()
-    });
+    }, { merge: true });
     return { success: true };
   } catch (error) {
-    try {
-      const docRef = doc(db, 'settings', 'welcome');
-      await updateDoc(docRef, {
-        ...settings,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now()
-      });
-      return { success: true };
-    } catch (createError) {
-      console.error('Error updating welcome settings:', createError);
-      return { success: false, error: createError };
-    }
+    console.error('Error updating welcome settings:', error);
+    return { success: false, error };
   }
 };
 
@@ -109,24 +100,14 @@ export const getSEOSettings = async () => {
 export const updateSEOSettings = async (settings: any) => {
   try {
     const docRef = doc(db, 'settings', 'seo');
-    await updateDoc(docRef, {
+    await setDoc(docRef, {
       ...settings,
       updatedAt: Timestamp.now()
-    });
+    }, { merge: true });
     return { success: true };
   } catch (error) {
-    try {
-      const docRef = doc(db, 'settings', 'seo');
-      await updateDoc(docRef, {
-        ...settings,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now()
-      });
-      return { success: true };
-    } catch (createError) {
-      console.error('Error updating SEO settings:', createError);
-      return { success: false, error: createError };
-    }
+    console.error('Error updating SEO settings:', error);
+    return { success: false, error };
   }
 };
 
@@ -150,24 +131,14 @@ export const getJoinTeamSettings = async () => {
 export const updateJoinTeamSettings = async (settings: any) => {
   try {
     const docRef = doc(db, 'settings', 'joinTeam');
-    await updateDoc(docRef, {
+    await setDoc(docRef, {
       ...settings,
       updatedAt: Timestamp.now()
-    });
+    }, { merge: true });
     return { success: true };
   } catch (error) {
-    try {
-      const docRef = doc(db, 'settings', 'joinTeam');
-      await updateDoc(docRef, {
-        ...settings,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now()
-      });
-      return { success: true };
-    } catch (createError) {
-      console.error('Error updating join team settings:', createError);
-      return { success: false, error: createError };
-    }
+    console.error('Error updating join team settings:', error);
+    return { success: false, error };
   }
 };
 
@@ -684,24 +655,14 @@ export const getDonationSettings = async () => {
 export const updateDonationSettings = async (settings: any) => {
   try {
     const docRef = doc(db, 'settings', 'donations');
-    await updateDoc(docRef, {
+    await setDoc(docRef, {
       ...settings,
       updatedAt: Timestamp.now()
-    });
+    }, { merge: true });
     return { success: true };
   } catch (error) {
-    try {
-      const docRef = doc(db, 'settings', 'donations');
-      await updateDoc(docRef, {
-        ...settings,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now()
-      });
-      return { success: true };
-    } catch (createError) {
-      console.error('Error updating donation settings:', createError);
-      return { success: false, error: createError };
-    }
+    console.error('Error updating donation settings:', error);
+    return { success: false, error };
   }
 };
 
@@ -841,24 +802,13 @@ export const getUISettings = async () => {
 export const updateUISettings = async (settings: any) => {
   try {
     const docRef = doc(db, 'settings', 'ui');
-    await updateDoc(docRef, {
+    await setDoc(docRef, {
       ...settings,
       updatedAt: Timestamp.now()
-    });
+    }, { merge: true });
     return { success: true };
   } catch (error) {
-    // If document doesn't exist, create it
-    try {
-      const docRef = doc(db, 'settings', 'ui');
-      await updateDoc(docRef, {
-        ...settings,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now()
-      });
-      return { success: true };
-    } catch (createError) {
-      console.error('Error updating UI settings:', createError);
-      return { success: false, error: createError };
-    }
+    console.error('Error updating UI settings:', error);
+    return { success: false, error };
   }
 };
