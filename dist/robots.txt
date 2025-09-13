@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://qbrain.in/sitemap.xml
+
+# Security
+Disallow: /Qadmin
+Disallow: /api/
+Disallow: /.env
+Disallow: /config/
+
+# Performance
+Crawl-delay: 1
